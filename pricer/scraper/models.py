@@ -3,10 +3,13 @@ from decimal import Decimal
 from django.db import models
 
 
-# Create your models here.
+def product_directory_path(instance, filename):
+    return 'products/{0}/{1}'.format(instance.name, filename)
+
+
 class Product(models.Model):
     name = models.CharField(max_length=250)
-    image_url = models.CharField(max_length=250)
+    image = models.ImageField(upload_to=product_directory_path, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
