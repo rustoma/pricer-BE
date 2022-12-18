@@ -4,18 +4,29 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from .models import Product, Price
+from .serializers import ProductSerializer, PriceSerializer
 
 
 @api_view(['GET'])
-def index(request):
-    return Response({"message": "Hello, world!"})
+def get_all_products(request):
+    if request.method == "GET":
+        all_products = Product.objects.all()
+        serializer = ProductSerializer(all_products, many=True)
+        return Response(serializer.data)
 
 
 @api_view(['GET'])
-def results(request, result_id):
-    return Response(f'Hello, world. You\'re at the scraper result {result_id}')
+def get_product(request, product_id):
+    if request.method == "GET":
+        product = Product.objects.get(pk=product_id)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
 
 
 @api_view(['GET'])
-def vote(request, vote_id):
-    return Response(f'Hello, world. You\'re at the scraper vote {vote_id}')
+def get_product_prices(request, product_id):
+    if request.method == "GET":
+        prices = Price.objects.all()
+        serializer = PriceSerializer(prices, many=True)
+        return Response(serializer.data)
